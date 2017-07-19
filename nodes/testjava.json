@@ -1,0 +1,10 @@
+{
+  "id": "99999001",
+  "name": "TestJavaNode",
+  "description": "Test node written by Java",
+  "type": "transform",
+  "nodeClass": "com.ericsson.ada.sparkflows.nodes.TestJavaNode",
+  "fields" : [
+    {"name":"n", "value":"10", "widget": "textfield", "title": "Num Rows to Print"}
+  ]
+}
