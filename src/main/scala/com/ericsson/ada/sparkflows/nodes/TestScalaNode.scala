@@ -8,9 +8,11 @@ import fire.context.JobContext
 import fire.workflowengine.Node
 import fire.output.OutputTable
 
+import scala.beans.BeanProperty
+
 class TestScalaNode extends Node {
 
-  var n: Int = 5
+  @BeanProperty var n: Int = 3
 
   def this(i: Int, nm: String, tempn: Int) = {
     this()

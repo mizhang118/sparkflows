@@ -9,6 +9,7 @@
 
   <properties>
     <java.version>1.8</java.version>
+    <hadoop.version>2.6.0</hadoop.version>
     <spark.version>2.1.1</spark.version>
     <spark.binary.version>2.11</spark.binary.version>
     <scala.version>2.11.8</scala.version>
@@ -94,14 +95,28 @@
       <scope>provided</scope>
     </dependency>
     
+		<!-- Adding Hadoop FS dependencies -->
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-hdfs</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-common</artifactId>
+			<version>${hadoop.version}</version>
+			<scope>provided</scope>
+		</dependency>
+    
     <!-- Adding SparklingWater dependencies -->
-<!--
+
 	<dependency>
 	  <groupId>ai.h2o</groupId>
-	  <artifactId>sparkling-water-core_${spark.binary.version}</artifactId>
-	  <version>1.6.12</version>
+	  <artifactId>sparkling-water-core_2.11</artifactId>
+	  <version>2.1.8</version>
 	</dependency>
--->    
+
 <!-- Adding H2O dependencies
 	<dependency>
 	  <groupId>ai.h2o</groupId>
@@ -200,6 +215,68 @@
         </configuration>
       </plugin>
 
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>2.6</version>
+            <executions>
+              <execution>
+                <id>copy-resources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>//Users/mz/app/fire-1.4.0/user-lib</outputDirectory>
+                  <resources>          
+                    <resource>
+                      <directory>target</directory>
+                        <includes>
+                            <include>*.jar</include>
+                        </includes>
+                    </resource>
+                  </resources>              
+                </configuration>
+              </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.8</version>
+            <executions>
+              <execution>
+                <id>copy-dependencies</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>dependencies</outputDirectory>
+                  <overWriteReleases>false</overWriteReleases>
+                  <overWriteSnapshots>false</overWriteSnapshots>
+                  <overWriteIfNewer>true</overWriteIfNewer>
+                </configuration>
+              </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>2.4.1</version>
+            <configuration>
+                <filesets>
+                    <fileset>
+                        <directory>dependencies</directory>
+                        <includes>
+                            <include>*.jar</include>
+                        </includes>
+                        <followSymlinks>false</followSymlinks>
+                    </fileset>
+                </filesets>
+            </configuration>
+       </plugin>
+<!--
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <version>2.3</version>
@@ -210,15 +287,15 @@
         </configuration>
         <executions>
           <execution>
-            <id>make-assembly</id> <!-- this is used for inheritance merges -->
-            <phase>package</phase> <!-- bind to the packaging phase -->
+            <id>make-assembly</id>
+            <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
-
+-->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
